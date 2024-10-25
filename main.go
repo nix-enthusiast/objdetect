@@ -23,11 +23,8 @@ func toGoString(cStr *C.char) string {
 	}
 }
 
-func main() {
-	argv := os.Args[1:]
-	isMultiple := len(argv) > 1
-
-	for _, fileName := range argv {
+func printObjects(fileNames []string, isMultiple bool) {
+	for _, fileName := range fileNames {
 		CFileName := C.CString(fileName)
 
 		fileContent, err := os.ReadFile(fileName)
@@ -140,5 +137,45 @@ func main() {
 
 		C.free_obj(readObjects, false)
 		C.free(unsafe.Pointer(CFileName))
+	}
+}
+
+func main() {
+	argv := os.Args[1:]
+	argc := len(argv)
+
+	helpMenu := ` OBJDetect - A Tool To Get Information About The Executable/Library Files
+--------------------------------------------------------------------------
+
+ DESCRIPTION
+-------------
+  cn [-h | /H | --help    | help]            : prints this message
+  cn [-i | /I | --input   | ipt]  <file(s)>  : parses files to get information`
+
+	if argc == 0 {
+		fmt.Println(helpMenu)
+		return
+	}
+
+	isMultiple := argc > 2
+	flag := argv[0]
+
+	switch flag {
+	case "-h":
+		fmt.Println(helpMenu)
+		return
+
+	case "-i":
+		if argc < 2 {
+			_, _ = fmt.Fprintf(os.Stderr, "Enter a file. Type 'objdetect -h' to get help")
+			os.Exit(1)
+		}
+
+		printObjects(argv[1:], isMultiple)
+		return
+
+	default:
+		_, _ = fmt.Fprintf(os.Stderr, "Invalid flag. Type 'objdetect -h' to get help")
+		os.Exit(1)
 	}
 }
