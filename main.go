@@ -24,7 +24,8 @@ func toGoString(cStr *C.char) string {
 }
 
 func printObjects(fileNames []string, isMultiple bool) {
-	for _, fileName := range fileNames {
+	fileNamesLen := len(fileNames)
+	for index, fileName := range fileNames {
 		CFileName := C.CString(fileName)
 
 		fileContent, err := os.ReadFile(fileName)
@@ -79,11 +80,10 @@ func printObjects(fileNames []string, isMultiple bool) {
 
 			memberNamesLength := int(object.member_name.length)
 			memberNames := unsafe.Slice(object.member_name.vec, memberNamesLength)
-			for j := 0; j < memberNamesLength; j++ {
-				member := memberNames[j]
+			for i, member := range memberNames {
 				memberName += C.GoString(member)
 
-				if j+1 != int(object.member_name.length) {
+				if i+1 != memberNamesLength {
 					memberName += " -> "
 				}
 			}
@@ -137,6 +137,11 @@ func printObjects(fileNames []string, isMultiple bool) {
 
 		C.free_obj(readObjects, false)
 		C.free(unsafe.Pointer(CFileName))
+
+		if index+1 != fileNamesLen {
+			fmt.Println()
+			fmt.Println()
+		}
 	}
 }
 

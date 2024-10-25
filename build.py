@@ -1,4 +1,5 @@
 from os import system
+from os.path import exists
 from sys import argv, stderr
 from platform import system as os_name
 
@@ -6,8 +7,12 @@ def build():
     system("mkdir -p build")
     system("git clone https://github.com/nix-enthusiast/unildd.git build/unildd")
     system("cargo build --release --manifest-path=build/unildd/Cargo.toml")
-    system("mkdir lib")
-    system("mkdir include")
+
+    if not exists("lib"):
+        system("mkdir lib")
+
+    if not exists("include"):
+        system("mkdir include")
 
     # I know this logic is dodgy
     match os_name():
@@ -19,7 +24,6 @@ def build():
             system("cp build/unildd/target/release/libunildd.so lib")
 
     system("cp build/unildd/header/unildd.h include")
-
 
 match argv[1]:
     case "--build" | "-b":
