@@ -161,13 +161,13 @@ func main() {
 	flag := argv[0]
 
 	switch flag {
-	case "-h":
+	case "-h", "/H", "--help", "help":
 		fmt.Println(helpMenu)
 		return
 
-	case "-i":
+	case "-i", "/I", "--input", "ipt":
 		if argc < 2 {
-			_, _ = fmt.Fprintf(os.Stderr, "Enter a file. Type 'objdetect -h' to get help")
+			_, _ = fmt.Fprintln(os.Stderr, "Enter a file. Type 'objdetect -h' to get help")
 			os.Exit(1)
 		}
 
@@ -175,7 +175,7 @@ func main() {
 		return
 
 	default:
-		_, _ = fmt.Fprintf(os.Stderr, "Invalid flag. Type 'objdetect -h' to get help")
+		_, _ = fmt.Fprintln(os.Stderr, "Invalid flag. Type 'objdetect -h' to get help")
 		os.Exit(1)
 	}
 }
