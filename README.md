@@ -19,9 +19,10 @@ OBJDetect is a program made in Go as an example of how to use [unildd](https://g
 - Run the `build.py` file:
 
   ```
-  python3 build.py --build   # To build the program
-  python3 build.py --run     # To directly run the program 
-  python3 build.py --clean   # To remove the build directory
+  python3 build.py --build    # To build the program
+  python3 build.py --rebuild  # To rebuild the program
+  python3 build.py --run      # To directly run the program 
+  python3 build.py --clean    # To remove the build directory
   ```
 
 - Take the file named `objdetect` (or `objdetect.exe` in Windows) from the directory named `build` and put it anywhere you want!
